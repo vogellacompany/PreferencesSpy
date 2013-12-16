@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Preferences Spy"
+            visible="true"
+            id="com.vogella.vde.preferencesspy.actionSet">
+         <menu
+               label="Preferences Spy"
+               id="preferencesSpyMenu">
+            <separator
+                  name="preferencesSpyGroup">
+            </separator>
+         </menu>
+         <action
+               label="&amp;Start"
+               class="com.vogella.vde.preferencesspy.actions.StartSpy"
+               tooltip="Start to spy preference changes"
+               menubarPath="preferencesSpyMenu/preferencesSpyGroup"
+               toolbarPath="preferencesSpyGroup"
+               id="com.vogella.vde.preferencesspy.actions.StartSpy">
+         </action>
+      </actionSet>
+   </extension>
+
+</plugin>
