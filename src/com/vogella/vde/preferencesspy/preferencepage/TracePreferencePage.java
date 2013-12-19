@@ -7,10 +7,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.vogella.vde.preferencesspy.Activator;
 
-public class SamplePreferencePage extends FieldEditorPreferencePage implements
+public class TracePreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
-	public SamplePreferencePage() {
+	public TracePreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Settings for the preference spy");

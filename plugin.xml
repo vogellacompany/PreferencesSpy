@@ -10,7 +10,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="com.vogella.vde.preferencesspy.preferencepage.SamplePreferencePage"
+            class="com.vogella.vde.preferencesspy.preferencepage.TracePreferencePage"
             id="com.vogella.vde.preferencesspy.page2"
             name="Preference Spy">
       </page>
