@@ -4,16 +4,15 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>com.vogella.vde</groupId>
+		<artifactId>com.vogella.vde.preferencesspy.parent</artifactId>
+		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../com.vogella.vde.preferencesspy.parent</relativePath>
+	</parent>
+
 	<groupId>com.vogella.vde</groupId>
-	<artifactId>com.vogella.vde.preferencesspy.aggregator</artifactId>
+	<artifactId>com.vogella.vde.preferencesspy.repository</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-
-
-	<modules>
-		<module>../com.vogella.vde.preferencesspy</module>
-		<module>../com.vogella.vde.preferencesspy.feature</module>
-		<module>../com.vogella.vde.preferencesspy.repository</module>
-	</modules>
-
+	<packaging>eclipse-repository</packaging>
 </project>
