@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChang
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.core.runtime.preferences.IPreferenceNodeVisitor;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
@@ -25,15 +24,18 @@ public class StartPreferenceSpy implements IStartup {
 
 	private final class ChangedPreferenceListener implements
 			IPreferenceChangeListener {
+		
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {
 			System.out.println("Key:" + event.getNode().absolutePath()
 					+ event.getKey() + "Value:" + event.getNewValue());
 			IWorkbenchWindow window = PlatformUI.getWorkbench()
 					.getActiveWorkbenchWindow();
-			MessageDialog.openInformation(window.getShell(), "Preferences Spy",
-					"Key:" + event.getNode().absolutePath() + event.getKey()
-							+ "Value:" + event.getNewValue());
+			String preferenceKey = "Key:" + event.getNode().absolutePath() + event.getKey();
+			String preferenceValue = "Value:" + event.getNewValue();
+			PreferencePopupDialog dialog = new PreferencePopupDialog(window.getShell(), "Preference Spy", "" );
+			dialog.setText(preferenceKey + preferenceValue);
+			dialog.open();
 		}
 	}
 
