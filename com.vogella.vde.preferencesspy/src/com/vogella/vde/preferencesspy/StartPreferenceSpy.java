@@ -34,7 +34,7 @@ public class StartPreferenceSpy implements IStartup {
 			String preferenceKey = "Key:" + event.getNode().absolutePath() + event.getKey();
 			String preferenceValue = "Value:" + event.getNewValue();
 			PreferencePopupDialog dialog = new PreferencePopupDialog(window.getShell(), "Preference Spy", "" );
-			dialog.setText(preferenceKey + preferenceValue);
+			dialog.setText(preferenceKey + "=" + preferenceValue);
 			dialog.open();
 		}
 	}
