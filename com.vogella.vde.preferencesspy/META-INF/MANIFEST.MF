@@ -6,6 +6,6 @@ Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: VOGELLA
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.vogella.vde.preferencesspy.Activator
