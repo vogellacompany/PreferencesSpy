@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="ASCII"?>
-<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmi:id="_YKjYcGxMEeSQ7v0akw7aRA">
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/descriptor/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_YKjYcGxMEeSQ7v0akw7aRA">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_wcDNcGxMEeSQ7v0akw7aRA" featurename="addons" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="application:Addon" xmi:id="_ztg-MGxMEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.addon.0" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.addon.PreferenceSpyAddon"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_P3fYQGxbEeSQ7v0akw7aRA" featurename="descriptors" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_T4iy4GxbEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.partdescriptor.preferenceSpy" label="Preference Spy" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.parts.PreferenceSpyPart">
+      <toolbar xmi:id="_z17t0GxhEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_A6VYQGxiEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.removeall" iconURI="platform:/plugin/com.vogella.vde.preferencesspy/icons/remove_co.png" command="_iGEkYGxiEeSQ7v0akw7aRA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_Tj_JEGxkEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.handledtoolitem.0" iconURI="platform:/plugin/com.vogella.vde.preferencesspy/icons/removeall_co.png" command="_eBGTEGxiEeSQ7v0akw7aRA"/>
+      </toolbar>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YcT00GxiEeSQ7v0akw7aRA" featurename="commands" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Command" xmi:id="_eBGTEGxiEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.command.removeAll" commandName="Remove All"/>
+    <elements xsi:type="commands:Command" xmi:id="_iGEkYGxiEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.command.removeEntry" commandName="Remove Entry"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_k-5ysGxiEeSQ7v0akw7aRA" featurename="handlers" parentElementId="org.eclipse.e4.legacy.ide.application">
+    <elements xsi:type="commands:Handler" xmi:id="_oq-b0GxiEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.handler.0" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.handler.RemoveAllHandler" command="_eBGTEGxiEeSQ7v0akw7aRA"/>
+    <elements xsi:type="commands:Handler" xmi:id="_xiIpwGxiEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.handler.1" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.handler.RemoveEntryHandler" command="_iGEkYGxiEeSQ7v0akw7aRA"/>
   </fragments>
 </fragment:ModelFragments>

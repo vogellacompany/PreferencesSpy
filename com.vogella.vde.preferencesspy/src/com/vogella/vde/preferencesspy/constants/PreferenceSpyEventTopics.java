@@ -2,5 +2,8 @@ package com.vogella.vde.preferencesspy.constants;
 
 public interface PreferenceSpyEventTopics {
 
+	public static final String PREFERENCESPY_PREFERENCE_ENTRIES_DELETE_ALL = "TOPIC_PREFERENCESPY/PREFERENCE_ENTRIES/DELETE_ALL";
+	public static final String PREFERENCESPY_PREFERENCE_ENTRIES_DELETE = "TOPIC_PREFERENCESPY/PREFERENCE_ENTRIES/DELETE";
+
 	public static final String PREFERENCESPY_PREFERENCE_CHANGED = "TOPIC_PREFERENCESPY/PREFERENCE/CHANGED";
 }
