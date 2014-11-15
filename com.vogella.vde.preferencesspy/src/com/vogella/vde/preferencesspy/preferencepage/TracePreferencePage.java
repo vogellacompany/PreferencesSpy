@@ -6,6 +6,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.vogella.vde.preferencesspy.Activator;
+import com.vogella.vde.preferencesspy.constants.PreferenceConstants;
 
 public class TracePreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
@@ -19,12 +20,13 @@ public class TracePreferencePage extends FieldEditorPreferencePage implements
 	/**
 	 * Creates the field editors
 	 */
+	@Override
 	public void createFieldEditors() {
-		addField(new BooleanFieldEditor(PreferenceConstants.P_BOOLEAN,
+		addField(new BooleanFieldEditor(PreferenceConstants.TRACE_PREFERENCES,
 				"&Trace preference values ", getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 	}
-
 }

@@ -3,9 +3,15 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Preferences Spy
 Bundle-SymbolicName: com.vogella.vde.preferencesspy;singleton:=true
 Bundle-Version: 0.1.0.qualifier
+Bundle-Activator: com.vogella.vde.preferencesspy.Activator
 Bundle-Vendor: VOGELLA
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.e4.ui.model.workbench;bundle-version="1.1.0.v20140512-1820",
+ org.eclipse.e4.core.di;bundle-version="1.4.0",
+ org.eclipse.e4.core.di.extensions;bundle-version="0.12.0",
+ org.eclipse.e4.core.services;bundle-version="1.2.0",
+ org.eclipse.osgi.services;bundle-version="3.4.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.vogella.vde.preferencesspy.Activator
+Import-Package: javax.annotation;version="1.2.0"
