@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Table;
 
 import com.vogella.vde.preferencesspy.constants.PreferenceSpyEventTopics;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry;
+import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
 
 public class PreferenceSpyPart {
 
@@ -35,10 +36,10 @@ public class PreferenceSpyPart {
 
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 
-		createColumn("Nodepath", 300);
-		createColumn("Key", 300);
-		createColumn("Old Value", 150);
-		createColumn("New Value", 150);
+		createColumn(Fields.nodePath, "Nodepath", 300);
+		createColumn(Fields.key, "Key", 300);
+		createColumn(Fields.oldValue, "Old Value", 150);
+		createColumn(Fields.newValue, "New Value", 150);
 
 		input = new WritableList();
 		ViewerSupport.bind(
@@ -48,13 +49,15 @@ public class PreferenceSpyPart {
 						"oldValue", "newValue" }));
 	}
 
-	private void createColumn(String columnName, int width) {
+	private void createColumn(Fields field, String columnName, int width) {
 		TableViewerColumn viewerColumn = new TableViewerColumn(tableViewer,
 				SWT.NONE);
 		viewerColumn.getColumn().setWidth(width);
 		viewerColumn.getColumn().setText(columnName);
 
 		viewerColumn.setLabelProvider(new ColumnLabelProvider());
+		viewerColumn.setEditingSupport(new PreferenceSpyEditingSupport(
+				tableViewer, field));
 	}
 
 	@Inject

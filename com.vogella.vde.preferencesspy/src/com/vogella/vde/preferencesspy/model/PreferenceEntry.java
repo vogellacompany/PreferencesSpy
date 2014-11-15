@@ -2,6 +2,10 @@ package com.vogella.vde.preferencesspy.model;
 
 public class PreferenceEntry {
 
+	public enum Fields {
+		nodePath, key, oldValue, newValue;
+	}
+
 	private String nodePath;
 
 	private String key;
