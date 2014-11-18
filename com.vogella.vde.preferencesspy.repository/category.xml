@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.vogella.vde.preferencesspy.feature_0.1.0.qualifier.jar" id="com.vogella.vde.preferencesspy.feature" version="0.1.0.qualifier"/>
+   <feature url="features/com.vogella.vde.preferencesspy.feature_0.1.0.qualifier.jar" id="com.vogella.vde.preferencesspy.feature" version="0.1.0.qualifier">
+      <category name="voclipse_tooling"/>
+   </feature>
    <category-def name="voclipse_tooling" label="Voclipse Tooling"/>
 </site>
