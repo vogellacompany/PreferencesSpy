@@ -1,7 +1,7 @@
-PreferencesSpy
+PreferenceSpy
 ==============
 
-PreferencesSpy shows changes in the eclipse preferences 
+PreferenceSpy shows changes in the eclipse preferences 
 
 
 P2 Updatesite
