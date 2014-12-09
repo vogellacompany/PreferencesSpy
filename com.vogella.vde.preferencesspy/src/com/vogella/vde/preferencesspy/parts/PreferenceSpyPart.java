@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -32,7 +33,7 @@ import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryPatternFilter;
 import com.vogella.vde.preferencesspy.model.PreferenceNodeEntry;
 
-public class PreferenceSpyPart {
+public class PreferenceSpyPart implements TreeViewerPart {
 
 	private PreferenceNodeEntry input = new PreferenceNodeEntry();
 	private FilteredTree filteredTree;
@@ -123,6 +124,11 @@ public class PreferenceSpyPart {
 			input.getPreferenceEntries().clear();
 			filteredTree.getViewer().refresh();
 		}
+	}
+
+	@Override
+	public TreeViewer getViewer() {
+		return filteredTree.getViewer();
 	}
 
 }
