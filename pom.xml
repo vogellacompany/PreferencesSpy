@@ -11,9 +11,9 @@
 
 
 	<modules>
-		<module>../com.vogella.vde.preferencesspy</module>
-		<module>../com.vogella.vde.preferencesspy.feature</module>
-		<module>../com.vogella.vde.preferencesspy.repository</module>
+		<module>./com.vogella.vde.preferencesspy</module>
+		<module>./com.vogella.vde.preferencesspy.feature</module>
+		<module>./com.vogella.vde.preferencesspy.repository</module>
 	</modules>
 
 </project>
