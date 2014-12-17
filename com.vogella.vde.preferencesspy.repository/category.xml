@@ -3,5 +3,5 @@
    <feature url="features/com.vogella.vde.preferencesspy.feature_0.1.0.qualifier.jar" id="com.vogella.vde.preferencesspy.feature" version="0.1.0.qualifier">
       <category name="voclipse_tooling"/>
    </feature>
-   <category-def name="voclipse_tooling" label="Voclipse Tooling"/>
+   <category-def name="voclipse_tooling" label="voclipse tooling for the Eclipse IDE"/>
 </site>
