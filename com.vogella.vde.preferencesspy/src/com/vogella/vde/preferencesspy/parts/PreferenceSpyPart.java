@@ -8,13 +8,17 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.core.databinding.beans.BeanProperties;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.jface.databinding.viewers.ViewerSupport;
+import org.eclipse.jface.databinding.swt.DisplayRealm;
+import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -23,6 +27,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -32,6 +38,9 @@ import com.vogella.vde.preferencesspy.model.PreferenceEntry;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryPatternFilter;
 import com.vogella.vde.preferencesspy.model.PreferenceNodeEntry;
+import com.vogella.vde.preferencesspy.parts.viewer.PreferenceEntryViewerComparator;
+import com.vogella.vde.preferencesspy.parts.viewer.PreferenceMapLabelProvider;
+import com.vogella.vde.preferencesspy.parts.viewer.PreferenceSpyEditingSupport;
 
 public class PreferenceSpyPart implements TreeViewerPart {
 
@@ -70,10 +79,31 @@ public class PreferenceSpyPart implements TreeViewerPart {
 		createColumn(Fields.oldValue, "Old Value", 150);
 		createColumn(Fields.newValue, "New Value", 150);
 
-		ViewerSupport.bind(filteredTree.getViewer(), input, BeanProperties.set("preferenceEntries",
-				PreferenceNodeEntry.class), BeanProperties.values(PreferenceEntry.class, new String[] { "nodePath",
-					"key", "oldValue", "newValue" }));
+		filteredTree.getViewer().setComparator(new PreferenceEntryViewerComparator());
 
+		FontDescriptor fontDescriptor = getBoldFontDescriptor();
+
+		Realm realm = DisplayRealm.getRealm(parent.getDisplay());
+		ObservableSetTreeContentProvider contentProvider = new ObservableSetTreeContentProvider(
+				BeanProperties.set("preferenceEntries",
+						PreferenceNodeEntry.class).setFactory(realm), null);
+		filteredTree.getViewer().setContentProvider(contentProvider);
+		filteredTree.getViewer().setLabelProvider(
+				new PreferenceMapLabelProvider(fontDescriptor, Properties.observeEach(
+						contentProvider.getKnownElements(), BeanProperties.values(PreferenceEntry.class, new String[] { "nodePath",
+							"key", "oldValue", "newValue" }))));
+		filteredTree.getViewer().setInput(input);
+	}
+
+	private FontDescriptor getBoldFontDescriptor() {
+		Font origFont = filteredTree.getViewer().getControl().getFont();
+		FontData[] fontData = origFont.getFontData();
+		for (FontData fontDataItem : fontData) {
+			fontDataItem.style = fontDataItem.style | SWT.BOLD;
+		}
+
+		FontDescriptor fontDescriptor = FontDescriptor.createFrom(fontData);
+		return fontDescriptor;
 	}
 
 	private void createColumn(Fields field, String columnName, int width) {
@@ -93,7 +123,9 @@ public class PreferenceSpyPart implements TreeViewerPart {
 		PreferenceNodeEntry preferenceNodeEntry = new PreferenceNodeEntry(event.getNode().absolutePath());
 		PreferenceEntry preferenceEntry = new PreferenceEntry(event.getNode().absolutePath(), event.getKey(),
 				String.valueOf(event.getOldValue()), String.valueOf(event.getNewValue()));
+		preferenceEntry.setRecentlyChanged(true);
 		preferenceNodeEntry.addChildren(preferenceEntry);
+		preferenceNodeEntry.setRecentlyChanged(true);
 		input.addChildren(preferenceNodeEntry);
 		filteredTree.getViewer().refresh();
 	}

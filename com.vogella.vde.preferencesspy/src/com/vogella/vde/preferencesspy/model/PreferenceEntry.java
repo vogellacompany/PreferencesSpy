@@ -8,6 +8,8 @@ public class PreferenceEntry extends AbstractModelObject {
 
 	private PreferenceEntry parent;
 
+	private boolean recentlyChanged;
+
 	private String nodePath;
 
 	private String key;
@@ -74,6 +76,14 @@ public class PreferenceEntry extends AbstractModelObject {
 		firePropertyChange("newValue", this.newValue, this.newValue = newValue);
 	}
 
+	public boolean isRecentlyChanged() {
+		return recentlyChanged;
+	}
+
+	public void setRecentlyChanged(boolean recentlyChanged) {
+		firePropertyChange("recentlyChanged", this.recentlyChanged, this.recentlyChanged = recentlyChanged);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -82,6 +92,8 @@ public class PreferenceEntry extends AbstractModelObject {
 		result = prime * result + ((newValue == null) ? 0 : newValue.hashCode());
 		result = prime * result + ((nodePath == null) ? 0 : nodePath.hashCode());
 		result = prime * result + ((oldValue == null) ? 0 : oldValue.hashCode());
+		result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+		result = prime * result + (recentlyChanged ? 1231 : 1237);
 		return result;
 	}
 
@@ -125,6 +137,17 @@ public class PreferenceEntry extends AbstractModelObject {
 		} else if (!oldValue.equals(other.oldValue)) {
 			return false;
 		}
+		if (parent == null) {
+			if (other.parent != null) {
+				return false;
+			}
+		} else if (!parent.equals(other.parent)) {
+			return false;
+		}
+		if (recentlyChanged != other.recentlyChanged) {
+			return false;
+		}
 		return true;
 	}
+
 }

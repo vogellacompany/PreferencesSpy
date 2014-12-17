@@ -1,4 +1,4 @@
-package com.vogella.vde.preferencesspy.parts;
+package com.vogella.vde.preferencesspy.parts.viewer;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
