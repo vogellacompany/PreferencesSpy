@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.di.extensions.Preference;
+import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
@@ -22,10 +23,14 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
+import org.osgi.service.prefs.BackingStoreException;
 
 import com.vogella.vde.preferencesspy.constants.PreferenceConstants;
 
 public class TogglePreferenceTraceControl {
+
+	@Inject
+	Logger LOG;
 
 	private ToolItem toolItem;
 	private ResourceManager resourceManager;
@@ -49,10 +54,15 @@ public class TogglePreferenceTraceControl {
 		toolItem.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-				Object source = e.getSource();
+			public void widgetSelected(SelectionEvent event) {
+				Object source = event.getSource();
 				if (source instanceof ToolItem) {
 					preferences.putBoolean(PreferenceConstants.TRACE_PREFERENCES, ((ToolItem) source).getSelection());
+					try {
+						preferences.flush();
+					} catch (BackingStoreException e) {
+						LOG.error(e);
+					}
 				}
 			}
 		});
