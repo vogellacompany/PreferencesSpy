@@ -16,7 +16,7 @@ import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.jface.databinding.swt.DisplayRealm;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -83,7 +83,7 @@ public class PreferenceSpyPart implements TreeViewerPart {
 
 		FontDescriptor fontDescriptor = getBoldFontDescriptor();
 
-		Realm realm = DisplayRealm.getRealm(parent.getDisplay());
+		Realm realm = SWTObservables.getRealm(filteredTree.getViewer().getControl().getDisplay());
 		ObservableSetTreeContentProvider contentProvider = new ObservableSetTreeContentProvider(
 				BeanProperties.set("preferenceEntries",
 						PreferenceNodeEntry.class).setFactory(realm), null);
