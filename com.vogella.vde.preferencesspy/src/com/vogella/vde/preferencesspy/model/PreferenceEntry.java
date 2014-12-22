@@ -18,7 +18,14 @@ public class PreferenceEntry extends AbstractModelObject {
 
 	private String newValue;
 
+	private long time;
+
 	public PreferenceEntry() {
+	}
+
+	public PreferenceEntry(String nodePath, String key) {
+		this.nodePath = nodePath;
+		this.key = key;
 	}
 
 	public PreferenceEntry(String nodePath, String key, String oldValue,
@@ -148,6 +155,14 @@ public class PreferenceEntry extends AbstractModelObject {
 			return false;
 		}
 		return true;
+	}
+
+	public long getTime() {
+		return time;
+	}
+
+	public void setTime(long time) {
+		this.time = time;
 	}
 
 }

@@ -22,8 +22,8 @@ public class PreferenceNodeEntry extends PreferenceEntry {
 		getPreferenceEntries().addAll(entries);
 	}
 
-	public void addChildren(PreferenceEntry... entry) {
-		getPreferenceEntries().addAll(Arrays.asList(entry));
+	public boolean addChildren(PreferenceEntry... entry) {
+		return getPreferenceEntries().addAll(Arrays.asList(entry));
 	}
 
 	public void removeChildren(Collection<PreferenceEntry> entries) {

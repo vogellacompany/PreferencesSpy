@@ -2,7 +2,9 @@ package com.vogella.vde.preferencesspy.parts;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -36,6 +38,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import com.vogella.vde.preferencesspy.constants.PreferenceSpyEventTopics;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
+import com.vogella.vde.preferencesspy.model.PreferenceEntryKey;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryPatternFilter;
 import com.vogella.vde.preferencesspy.model.PreferenceNodeEntry;
 import com.vogella.vde.preferencesspy.parts.viewer.PreferenceEntryViewerComparator;
@@ -45,6 +48,7 @@ import com.vogella.vde.preferencesspy.parts.viewer.PreferenceSpyEditingSupport;
 public class PreferenceSpyPart implements TreeViewerPart {
 
 	private PreferenceNodeEntry input = new PreferenceNodeEntry();
+	private Map<PreferenceEntryKey, PreferenceEntry> recentPreferenceEntries = new HashMap<PreferenceEntryKey, PreferenceEntry>();
 	private FilteredTree filteredTree;
 
 	@PostConstruct
@@ -120,13 +124,25 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	public void preferenceChanged(
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_CHANGED) PreferenceChangeEvent event) {
 
-		PreferenceNodeEntry preferenceNodeEntry = new PreferenceNodeEntry(event.getNode().absolutePath());
-		PreferenceEntry preferenceEntry = new PreferenceEntry(event.getNode().absolutePath(), event.getKey(),
-				String.valueOf(event.getOldValue()), String.valueOf(event.getNewValue()));
-		preferenceEntry.setRecentlyChanged(true);
-		preferenceNodeEntry.addChildren(preferenceEntry);
-		preferenceNodeEntry.setRecentlyChanged(true);
-		input.addChildren(preferenceNodeEntry);
+		PreferenceEntryKey preferenceEntryKey = new PreferenceEntryKey(event.getNode().absolutePath(), event.getKey());
+
+		PreferenceEntry preferenceEntry = recentPreferenceEntries.get(preferenceEntryKey);
+		if (null == preferenceEntry) {
+			PreferenceNodeEntry preferenceNodeEntry = new PreferenceNodeEntry(event.getNode().absolutePath());
+			preferenceEntry = new PreferenceEntry(event.getNode().absolutePath(), event.getKey());
+			preferenceEntry.setRecentlyChanged(true);
+			preferenceNodeEntry.setRecentlyChanged(true);
+			preferenceNodeEntry.addChildren(preferenceEntry);
+			preferenceEntry.setParent(preferenceNodeEntry);
+			input.addChildren(preferenceNodeEntry);
+			filteredTree.getViewer().setInput(input);
+			recentPreferenceEntries.put(preferenceEntryKey, preferenceEntry);
+		}
+
+		preferenceEntry.setOldValue(String.valueOf(event.getOldValue()));
+		preferenceEntry.setNewValue(String.valueOf(event.getNewValue()));
+		preferenceEntry.getParent().setTime(System.currentTimeMillis());
+
 		filteredTree.getViewer().refresh();
 	}
 
@@ -143,6 +159,10 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	public void DeletePreferenceEntries(
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_ENTRIES_DELETE) List<PreferenceEntry> preferenceEntries) {
 		if (preferenceEntries != null && !preferenceEntries.isEmpty()) {
+			for (PreferenceEntry preferenceEntry : preferenceEntries) {
+				recentPreferenceEntries.remove(new PreferenceEntryKey(preferenceEntry.getNodePath(), preferenceEntry
+						.getKey()));
+			}
 			input.removeChildren(preferenceEntries);
 			filteredTree.getViewer().refresh();
 		}
@@ -153,6 +173,7 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	public void DeleteAllPreferenceEntries(
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_ENTRIES_DELETE_ALL) List<PreferenceEntry> preferenceEntries) {
 		if (input != null) {
+			recentPreferenceEntries.clear();
 			input.getPreferenceEntries().clear();
 			filteredTree.getViewer().refresh();
 		}
