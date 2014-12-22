@@ -6,6 +6,8 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_P3fYQGxbEeSQ7v0akw7aRA" featurename="descriptors" parentElementId="org.eclipse.e4.legacy.ide.application">
     <elements xsi:type="basic:PartDescriptor" xmi:id="_T4iy4GxbEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.partdescriptor.preferenceSpy" label="Preference Spy" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.parts.PreferenceSpyPart">
       <toolbar xmi:id="_z17t0GxhEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.toolbar.0">
+        <children xsi:type="menu:ToolControl" xmi:id="_HKPQsIboEeS8O7Wb7Enz2Q" elementId="com.vogella.vde.preferencesspy.toolcontrol.1" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.handler.ToggleLayoutControl"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_BW4yAIboEeS8O7Wb7Enz2Q" elementId="com.vogella.vde.preferencesspy.toolbarseparator.2"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_WhdsMHY7EeSuTdKDH5hMwg" elementId="com.vogella.vde.preferencesspy.handledtoolitem.0" iconURI="platform:/plugin/com.vogella.vde.preferencesspy/icons/show_all_preferences.png" command="_ufxRsHY2EeSuTdKDH5hMwg"/>
         <children xsi:type="menu:ToolControl" xmi:id="_D4kokIVcEeSI3e-Kt-dGSA" elementId="com.vogella.vde.preferencesspy.toolcontrol.0" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.handler.TogglePreferenceTraceControl"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_xSwgEH_hEeSk-4v3KnNHPw" elementId="com.vogella.vde.preferencesspy.toolbarseparator.0"/>

@@ -5,6 +5,11 @@ package com.vogella.vde.preferencesspy.constants;
  */
 public class PreferenceConstants {
 
+	public enum ViewerLayouts {
+		Flat, Hierarchical;
+	}
+
 	public static final String TRACE_PREFERENCES = "tracepreferences";
+	public static final String HIERARCHICAL_LAYOUT = "hierarchicalLayoutPreference";
 
 }
