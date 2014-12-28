@@ -14,12 +14,12 @@ import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.property.Properties;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.databinding.swt.SWTObservables;
-import org.eclipse.jface.databinding.viewers.ObservableSetTreeContentProvider;
 import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -35,12 +35,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
 
+import com.vogella.vde.preferencesspy.constants.PreferenceConstants;
 import com.vogella.vde.preferencesspy.constants.PreferenceSpyEventTopics;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryKey;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryPatternFilter;
 import com.vogella.vde.preferencesspy.model.PreferenceNodeEntry;
+import com.vogella.vde.preferencesspy.parts.viewer.PreferenceEntriesContentProvider;
 import com.vogella.vde.preferencesspy.parts.viewer.PreferenceEntryViewerComparator;
 import com.vogella.vde.preferencesspy.parts.viewer.PreferenceMapLabelProvider;
 import com.vogella.vde.preferencesspy.parts.viewer.PreferenceSpyEditingSupport;
@@ -50,6 +52,7 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	private PreferenceNodeEntry input = new PreferenceNodeEntry();
 	private Map<PreferenceEntryKey, PreferenceEntry> recentPreferenceEntries = new HashMap<PreferenceEntryKey, PreferenceEntry>();
 	private FilteredTree filteredTree;
+	private boolean hierarchicalLayoutPreference;
 
 	@PostConstruct
 	public void postConstruct(Composite parent, final ESelectionService selectionService, EModelService modelService,
@@ -88,9 +91,10 @@ public class PreferenceSpyPart implements TreeViewerPart {
 		FontDescriptor fontDescriptor = getBoldFontDescriptor();
 
 		Realm realm = SWTObservables.getRealm(filteredTree.getViewer().getControl().getDisplay());
-		ObservableSetTreeContentProvider contentProvider = new ObservableSetTreeContentProvider(
+		PreferenceEntriesContentProvider contentProvider = new PreferenceEntriesContentProvider(
 				BeanProperties.set("preferenceEntries",
 						PreferenceNodeEntry.class).setFactory(realm), null);
+		contentProvider.setHierarchicalLayout(hierarchicalLayoutPreference);
 		filteredTree.getViewer().setContentProvider(contentProvider);
 		filteredTree.getViewer().setLabelProvider(
 				new PreferenceMapLabelProvider(fontDescriptor, Properties.observeEach(
@@ -117,6 +121,18 @@ public class PreferenceSpyPart implements TreeViewerPart {
 
 		viewerColumn.setLabelProvider(new ColumnLabelProvider());
 		viewerColumn.setEditingSupport(new PreferenceSpyEditingSupport(filteredTree.getViewer(), field));
+	}
+
+	@Inject
+	public void layoutChanged(
+			@Preference(value = PreferenceConstants.HIERARCHICAL_LAYOUT) boolean hierarchicalLayoutPreference) {
+		this.hierarchicalLayoutPreference = hierarchicalLayoutPreference;
+		if (filteredTree != null && !filteredTree.getViewer().getControl().isDisposed()) {
+			PreferenceEntriesContentProvider contentProvider = (PreferenceEntriesContentProvider) filteredTree
+					.getViewer().getContentProvider();
+			contentProvider.setHierarchicalLayout(hierarchicalLayoutPreference);
+			filteredTree.getViewer().refresh();
+		}
 	}
 
 	@Inject
