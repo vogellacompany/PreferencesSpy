@@ -30,7 +30,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -105,13 +104,8 @@ public class PreferenceSpyPart implements TreeViewerPart {
 
 	private FontDescriptor getBoldFontDescriptor() {
 		Font origFont = filteredTree.getViewer().getControl().getFont();
-		FontData[] fontData = origFont.getFontData();
-		for (FontData fontDataItem : fontData) {
-			fontDataItem.style = fontDataItem.style | SWT.BOLD;
-		}
-
-		FontDescriptor fontDescriptor = FontDescriptor.createFrom(fontData);
-		return fontDescriptor;
+		FontDescriptor fontDescriptor = FontDescriptor.createFrom(origFont);
+		return fontDescriptor.setStyle(SWT.BOLD);
 	}
 
 	private void createColumn(Fields field, String columnName, int width) {
