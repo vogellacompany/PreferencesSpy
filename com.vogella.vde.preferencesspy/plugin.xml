@@ -16,14 +16,5 @@
             name="Preference Spy">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <e4view
-            class="com.vogella.vde.preferencesspy.parts.PreferenceSpyPart"
-            id="com.vogella.vde.preferencesspy.e4viewPart"
-            name="Preference Spy"
-            restorable="true">
-      </e4view>
-   </extension>
 
 </plugin>
