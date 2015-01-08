@@ -2,9 +2,7 @@ package com.vogella.vde.preferencesspy.parts;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -39,6 +37,7 @@ import com.vogella.vde.preferencesspy.constants.PreferenceConstants;
 import com.vogella.vde.preferencesspy.constants.PreferenceSpyEventTopics;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry;
 import com.vogella.vde.preferencesspy.model.PreferenceEntry.Fields;
+import com.vogella.vde.preferencesspy.model.PreferenceEntryManager;
 import com.vogella.vde.preferencesspy.model.PreferenceEntryPatternFilter;
 import com.vogella.vde.preferencesspy.model.PreferenceNodeEntry;
 import com.vogella.vde.preferencesspy.parts.viewer.PreferenceEntriesContentProvider;
@@ -48,14 +47,15 @@ import com.vogella.vde.preferencesspy.parts.viewer.PreferenceSpyEditingSupport;
 
 public class PreferenceSpyPart implements TreeViewerPart {
 
-	private PreferenceNodeEntry input = new PreferenceNodeEntry();
-	private Map<String, PreferenceNodeEntry> recentPreferenceEntries = new HashMap<String, PreferenceNodeEntry>();
 	private FilteredTree filteredTree;
 	private boolean hierarchicalLayoutPreference;
+	private PreferenceEntryManager preferenceEntryManager;
 
 	@PostConstruct
 	public void postConstruct(Composite parent, final ESelectionService selectionService, EModelService modelService,
 			MWindow window) {
+
+		preferenceEntryManager = new PreferenceEntryManager();
 
 		PreferenceEntryPatternFilter patternFilter = new PreferenceEntryPatternFilter();
 		patternFilter.setIncludeLeadingWildcard(true);
@@ -99,7 +99,7 @@ public class PreferenceSpyPart implements TreeViewerPart {
 				new PreferenceMapLabelProvider(fontDescriptor, Properties.observeEach(
 						contentProvider.getKnownElements(), BeanProperties.values(PreferenceEntry.class, new String[] { "nodePath",
 							"key", "oldValue", "newValue" }))));
-		filteredTree.getViewer().setInput(input);
+		filteredTree.getViewer().setInput(preferenceEntryManager);
 	}
 
 	private FontDescriptor getBoldFontDescriptor() {
@@ -135,7 +135,8 @@ public class PreferenceSpyPart implements TreeViewerPart {
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_CHANGED) PreferenceChangeEvent event) {
 
 
-		PreferenceNodeEntry preferenceNodeEntry = recentPreferenceEntries.get(event.getNode().absolutePath());
+		PreferenceNodeEntry preferenceNodeEntry = preferenceEntryManager.getRecentPreferenceNodeEntry(event.getNode()
+				.absolutePath());
 		PreferenceEntry preferenceEntry = new PreferenceEntry(event.getNode().absolutePath(), event.getKey());
 		preferenceEntry.setRecentlyChanged(true);
 		if (null == preferenceNodeEntry) {
@@ -143,9 +144,9 @@ public class PreferenceSpyPart implements TreeViewerPart {
 			preferenceNodeEntry.setRecentlyChanged(true);
 			preferenceNodeEntry.addChildren(preferenceEntry);
 			preferenceEntry.setParent(preferenceNodeEntry);
-			input.addChildren(preferenceNodeEntry);
-			filteredTree.getViewer().setInput(input);
-			recentPreferenceEntries.put(event.getNode().absolutePath(), preferenceNodeEntry);
+			preferenceEntryManager.addChildren(preferenceNodeEntry);
+			filteredTree.getViewer().setInput(preferenceEntryManager);
+			preferenceEntryManager.putRecentPreferenceEntry(event.getNode().absolutePath(), preferenceNodeEntry);
 		} else {
 			preferenceEntry.setParent(preferenceNodeEntry);
 			PreferenceEntry existingPreferenceEntry = findPreferenceEntry(preferenceEntry);
@@ -185,7 +186,7 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	@Optional
 	public void preferenceChanged(
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_SHOW) Collection<PreferenceEntry> preferenceEntries) {
-		input.addChildren(preferenceEntries);
+		preferenceEntryManager.addChildren(preferenceEntries);
 		filteredTree.getViewer().refresh();
 	}
 
@@ -195,9 +196,9 @@ public class PreferenceSpyPart implements TreeViewerPart {
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_ENTRIES_DELETE) List<PreferenceEntry> preferenceEntries) {
 		if (preferenceEntries != null && !preferenceEntries.isEmpty()) {
 			for (PreferenceEntry preferenceEntry : preferenceEntries) {
-				recentPreferenceEntries.remove(preferenceEntry.getNodePath());
+				preferenceEntryManager.removeChildren(preferenceEntry);
 			}
-			input.removeChildren(preferenceEntries);
+			preferenceEntryManager.removeChildren(preferenceEntries);
 			filteredTree.getViewer().refresh();
 		}
 	}
@@ -206,9 +207,9 @@ public class PreferenceSpyPart implements TreeViewerPart {
 	@Optional
 	public void DeleteAllPreferenceEntries(
 			@UIEventTopic(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_ENTRIES_DELETE_ALL) List<PreferenceEntry> preferenceEntries) {
-		if (input != null) {
-			recentPreferenceEntries.clear();
-			input.getPreferenceEntries().clear();
+		if (preferenceEntryManager != null) {
+			preferenceEntryManager.clearRecentPreferenceNodeEntry();
+			preferenceEntryManager.getPreferenceEntries().clear();
 			filteredTree.getViewer().refresh();
 		}
 	}
