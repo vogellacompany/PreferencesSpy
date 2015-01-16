@@ -3,6 +3,10 @@ package com.vogella.vde.preferencesspy.addon;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.core.internal.preferences.EclipsePreferences;
+import org.eclipse.core.runtime.preferences.BundleDefaultsScope;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
@@ -19,6 +23,17 @@ import com.vogella.vde.preferencesspy.Activator;
 import com.vogella.vde.preferencesspy.constants.PreferenceConstants;
 import com.vogella.vde.preferencesspy.constants.PreferenceSpyEventTopics;
 
+/**
+ * This model addon is used to register an IPreferenceChangeListener for all
+ * {@link EclipsePreferences} and it fires an
+ * {@link PreferenceSpyEventTopics#PREFERENCESPY_PREFERENCE_CHANGED} event via
+ * the {@link IEventBroker}.<br/>
+ * The Object, which is send within the
+ * {@link PreferenceSpyEventTopics#PREFERENCESPY_PREFERENCE_CHANGED} event is a
+ * PreferenceChangeEvent.
+ *
+ */
+@SuppressWarnings("restriction")
 public class PreferenceSpyAddon {
 
 	@Inject
@@ -27,8 +42,10 @@ public class PreferenceSpyAddon {
 	@Inject
 	private IEventBroker eventBroker;
 
-	private IEclipsePreferences eclipsePreferences = InstanceScope.INSTANCE
-			.getNode("");
+	private IEclipsePreferences bundleDefaultsScopePreferences = BundleDefaultsScope.INSTANCE.getNode("");
+	private IEclipsePreferences configurationScopePreferences = ConfigurationScope.INSTANCE.getNode("");
+	private IEclipsePreferences defaultScopePreferences = DefaultScope.INSTANCE.getNode("");
+	private IEclipsePreferences instanceScopePreferences = InstanceScope.INSTANCE.getNode("");
 
 	private ChangedPreferenceListener preferenceChangedListener = new ChangedPreferenceListener();
 
@@ -37,19 +54,25 @@ public class PreferenceSpyAddon {
 	public void initialzePreferenceSpy(
 			@Preference(value = PreferenceConstants.TRACE_PREFERENCES) boolean tracePreferences) {
 		if (tracePreferences) {
-			registerVisitor();
+			registerVisitors();
 		} else {
-			deregisterVisitor();
+			deregisterVisitors();
 		}
 	}
 
-	private void deregisterVisitor() {
+	private void registerVisitors() {
+		addPreferenceListener(bundleDefaultsScopePreferences);
+		addPreferenceListener(configurationScopePreferences);
+		addPreferenceListener(defaultScopePreferences);
+		addPreferenceListener(instanceScopePreferences);
+	}
+
+	private void addPreferenceListener(IEclipsePreferences rootPreference) {
 		try {
-			eclipsePreferences.accept(new IPreferenceNodeVisitor() {
+			rootPreference.accept(new IPreferenceNodeVisitor() {
 				@Override
-				public boolean visit(IEclipsePreferences node)
-						throws BackingStoreException {
-					node.removePreferenceChangeListener(preferenceChangedListener);
+				public boolean visit(IEclipsePreferences node) throws BackingStoreException {
+					node.addPreferenceChangeListener(preferenceChangedListener);
 					return true;
 				}
 			});
@@ -58,13 +81,19 @@ public class PreferenceSpyAddon {
 		}
 	}
 
-	private void registerVisitor() {
+	private void deregisterVisitors() {
+		removePreferenceListener(bundleDefaultsScopePreferences);
+		removePreferenceListener(configurationScopePreferences);
+		removePreferenceListener(defaultScopePreferences);
+		removePreferenceListener(instanceScopePreferences);
+	}
+
+	private void removePreferenceListener(IEclipsePreferences rootPreference) {
 		try {
-			eclipsePreferences.accept(new IPreferenceNodeVisitor() {
+			rootPreference.accept(new IPreferenceNodeVisitor() {
 				@Override
-				public boolean visit(IEclipsePreferences node)
-						throws BackingStoreException {
-					node.addPreferenceChangeListener(preferenceChangedListener);
+				public boolean visit(IEclipsePreferences node) throws BackingStoreException {
+					node.removePreferenceChangeListener(preferenceChangedListener);
 					return true;
 				}
 			});
@@ -79,14 +108,11 @@ public class PreferenceSpyAddon {
 		store.setDefault(PreferenceConstants.TRACE_PREFERENCES, false);
 	}
 
-	private final class ChangedPreferenceListener implements
-			IPreferenceChangeListener {
+	private final class ChangedPreferenceListener implements IPreferenceChangeListener {
 
 		@Override
 		public void preferenceChange(PreferenceChangeEvent event) {
-			eventBroker.post(
-					PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_CHANGED,
-					event);
+			eventBroker.post(PreferenceSpyEventTopics.PREFERENCESPY_PREFERENCE_CHANGED, event);
 		}
 	}
 }
