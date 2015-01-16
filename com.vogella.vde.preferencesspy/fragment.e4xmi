@@ -4,7 +4,10 @@
     <elements xsi:type="application:Addon" xmi:id="_ztg-MGxMEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.addon.0" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.addon.PreferenceSpyAddon"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_P3fYQGxbEeSQ7v0akw7aRA" featurename="descriptors" parentElementId="org.eclipse.e4.legacy.ide.application">
-    <elements xsi:type="basic:PartDescriptor" xmi:id="_T4iy4GxbEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.partdescriptor.preferenceSpy" label="Preference Spy" iconURI="platform:/plugin/com.vogella.vde.preferencesspy/icons/preference_spy.png" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.parts.PreferenceSpyPart">
+    <elements xsi:type="basic:PartDescriptor" xmi:id="_T4iy4GxbEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.partdescriptor.preferenceSpy" label="Preference Spy" iconURI="platform:/plugin/com.vogella.vde.preferencesspy/icons/preference_spy.png" allowMultiple="true" category="Eclipse runtime spies" closeable="true" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.parts.PreferenceSpyPart">
+      <tags>View</tags>
+      <tags>Spy</tags>
+      <tags>categoryTag:Eclipse runtime spies</tags>
       <toolbar xmi:id="_z17t0GxhEeSQ7v0akw7aRA" elementId="com.vogella.vde.preferencesspy.toolbar.0">
         <children xsi:type="menu:ToolControl" xmi:id="_HKPQsIboEeS8O7Wb7Enz2Q" elementId="com.vogella.vde.preferencesspy.toolcontrol.1" contributionURI="bundleclass://com.vogella.vde.preferencesspy/com.vogella.vde.preferencesspy.handler.ToggleLayoutControl"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_BW4yAIboEeS8O7Wb7Enz2Q" elementId="com.vogella.vde.preferencesspy.toolbarseparator.2"/>
