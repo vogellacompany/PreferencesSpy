@@ -18,3 +18,9 @@ P2 Updatesite
 =============
 
 http://dl.bintray.com/vogellacompany/eclipse-preference-spy
+
+Open Preference Spy before Eclipse 4.5 M5
+=========================================
+
+The Preference Spy is only available via "Quick access" (Ctrl + 3) before Eclipse 4.5 M5.
+
